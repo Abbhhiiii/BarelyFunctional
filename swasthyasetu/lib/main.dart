@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'screens/landing_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 const _seedGreen = Color(0xFF8BC34A); // pleasant light green seed
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const SwasthyaSetuApp());
 }
+
 
 class SwasthyaSetuApp extends StatelessWidget {
   const SwasthyaSetuApp({super.key});
