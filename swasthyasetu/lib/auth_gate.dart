@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/patient_dashboard.dart';
-
+import 'screens/gov_worker_dashboard.dart';
 import 'screens/landing_page.dart';
 import 'screens/doctor_dashboard.dart';
 
@@ -56,6 +56,9 @@ class AuthGate extends StatelessWidget {
             }
             if (role == 'patient') {
               return const PatientDashboard();
+            }
+            if (role == 'gov_worker') {
+              return const GovWorkerDashboard();
             }
 
             // Fallback
