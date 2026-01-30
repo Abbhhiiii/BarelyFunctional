@@ -19,6 +19,30 @@ class AuthService {
 
   return doc['role'];
 }
+Future<void> registerGovWorker({
+  required String email,
+  required String password,
+  required String name,
+  required String age,
+  required String workLocation,
+}) async {
+  // 1️⃣ Create auth user
+  UserCredential cred = await _auth.createUserWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
+
+  // 2️⃣ Save worker profile
+  await _db.collection('users').doc(cred.user!.uid).set({
+    'role': 'gov_worker',
+    'email': email,
+    'name': name,
+    'age': age,
+    'workLocation': workLocation,
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+}
+
 Future<void> registerPatient({
   required String email,
   required String password,

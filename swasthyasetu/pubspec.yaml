@@ -64,6 +64,8 @@ flutter:
   assets:
     - assets/images/bunny.png
     - assets/images/header.png
+    - assets/images/signin.png
+    - assets/images/signup.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

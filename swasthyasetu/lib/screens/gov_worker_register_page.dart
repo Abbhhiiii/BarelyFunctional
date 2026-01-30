@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'patient_dashboard.dart';
+import 'gov_worker_dashboard.dart';
 
-class PatientRegisterPage extends StatefulWidget {
-  const PatientRegisterPage({super.key});
+class GovWorkerRegisterPage extends StatefulWidget {
+  const GovWorkerRegisterPage({super.key});
 
   @override
-  State<PatientRegisterPage> createState() => _PatientRegisterPageState();
+  State<GovWorkerRegisterPage> createState() => _GovWorkerRegisterPageState();
 }
 
-class _PatientRegisterPageState extends State<PatientRegisterPage> {
+class _GovWorkerRegisterPageState extends State<GovWorkerRegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
   final ageController = TextEditingController();
-  final phoneController = TextEditingController();
-  final addressController = TextEditingController();
-
+  final workLocationController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  String gender = 'Male';
-
-  bool diabetes = false;
-  bool bp = false;
-  bool asthma = false;
 
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Patient Registration")),
+      appBar: AppBar(title: const Text("Government Worker Registration")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Card(
@@ -44,18 +36,14 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
                 children: [
                   _field("Full Name", nameController),
                   _field("Age", ageController,
-                      keyboard: TextInputType.number),
-                  _genderSelector(),
-                  _field("Phone Number", phoneController,
-                      keyboard: TextInputType.phone),
-                  _field("Address", addressController),
+                      keyboardType: TextInputType.number),
+                  _field("Work Location / Address", workLocationController),
 
                   const Divider(height: 40),
 
                   _field("Email", emailController,
-                      keyboard: TextInputType.emailAddress),
-                  _field("Password", passwordController,
-                      isPassword: true),
+                      keyboardType: TextInputType.emailAddress),
+                  _field("Password", passwordController, isPassword: true),
 
                   const SizedBox(height: 30),
 
@@ -82,33 +70,17 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
     String label,
     TextEditingController controller, {
     bool isPassword = false,
-    TextInputType keyboard = TextInputType.text,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
-        keyboardType: keyboard,
+        keyboardType: keyboardType,
         decoration: InputDecoration(labelText: label),
         validator: (v) =>
             v == null || v.isEmpty ? "Please enter $label" : null,
-      ),
-    );
-  }
-
-  Widget _genderSelector() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: DropdownButtonFormField<String>(
-        initialValue: gender,
-        items: const [
-          DropdownMenuItem(value: 'Male', child: Text('Male')),
-          DropdownMenuItem(value: 'Female', child: Text('Female')),
-          DropdownMenuItem(value: 'Other', child: Text('Other')),
-        ],
-        onChanged: (v) => setState(() => gender = v!),
-        decoration: const InputDecoration(labelText: "Gender"),
       ),
     );
   }
@@ -119,25 +91,17 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
     setState(() => loading = true);
 
     try {
-      await AuthService().registerPatient(
+      await AuthService().registerGovWorker(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
         name: nameController.text.trim(),
         age: ageController.text.trim(),
-        gender: gender,
-        phone: phoneController.text.trim(),
-        address: addressController.text.trim(),
-        medicalHistory: {
-          'diabetes': diabetes,
-          'bp': bp,
-          'asthma': asthma,
-        },
-        emergencyContact: {}, // we’ll add later
+        workLocation: workLocationController.text.trim(),
       );
 
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const PatientDashboard()),
+        MaterialPageRoute(builder: (_) => const GovWorkerDashboard()),
         (_) => false,
       );
     } catch (e) {
