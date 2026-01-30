@@ -5,6 +5,22 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  Future<String> getCurrentUserRole() async {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .get();
+
+  if (!doc.exists) {
+    throw Exception("User profile not found");
+  }
+
+  return doc['role'];
+}
+
+
   Future<void> registerDoctor({
   required String email,
   required String password,
