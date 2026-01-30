@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/landing_page.dart';
+import 'package:swasthyasetu/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 
 const _seedGreen = Color(0xFF8BC34A); // pleasant light green seed
 
@@ -52,7 +51,7 @@ class SwasthyaSetuApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LandingPage(),
+      home: const AuthGate(),
     );
   }
 }

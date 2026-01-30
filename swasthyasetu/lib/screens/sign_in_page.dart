@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'doctor_dashboard.dart';
+import 'patient_dashboard.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -81,7 +82,15 @@ class _SignInPageState extends State<SignInPage> {
           context,
           MaterialPageRoute(builder: (_) => const DoctorDashboard()),
         );
-      } else {
+      }
+      if(role == 'patient'){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const PatientDashboard()),
+        );
+
+      } 
+      else {
         throw Exception("Unknown role");
       }
 
