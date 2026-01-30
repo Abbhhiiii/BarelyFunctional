@@ -3,6 +3,7 @@ import 'package:swasthyasetu/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 const _seedGreen = Color(0xFF8BC34A); // pleasant light green seed
+//gg
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
