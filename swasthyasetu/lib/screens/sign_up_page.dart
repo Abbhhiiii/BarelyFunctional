@@ -28,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<String>(
-                  value: selectedRole,
+                  initialValue: selectedRole,
                   decoration: const InputDecoration(
                     labelText: "Select Profile Type",
                   ),
