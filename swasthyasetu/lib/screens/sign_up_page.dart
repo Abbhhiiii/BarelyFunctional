@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swasthyasetu/screens/patient_register_page.dart';
 import 'doctor_register_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -58,6 +59,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => const DoctorRegisterPage(),
+                        ),
+                      );
+                    }
+                    if (selectedRole == 'User') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PatientRegisterPage(),
                         ),
                       );
                     }

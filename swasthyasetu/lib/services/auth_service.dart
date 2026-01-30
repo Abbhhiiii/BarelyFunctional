@@ -19,6 +19,38 @@ class AuthService {
 
   return doc['role'];
 }
+Future<void> registerPatient({
+  required String email,
+  required String password,
+  required String name,
+  required String age,
+  required String gender,
+  required String phone,
+  required String address,
+  required Map<String, dynamic> medicalHistory,
+  required Map<String, dynamic> emergencyContact,
+}) async {
+  // 1️⃣ Create auth user
+  UserCredential cred = await _auth.createUserWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
+
+  // 2️⃣ Save patient profile
+  await _db.collection('users').doc(cred.user!.uid).set({
+    'role': 'patient',
+    'email': email,
+    'name': name,
+    'age': age,
+    'gender': gender,
+    'phone': phone,
+    'address': address,
+    'medicalHistory': medicalHistory,
+    'emergencyContact': emergencyContact,
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+}
+
 
 
   Future<void> registerDoctor({
