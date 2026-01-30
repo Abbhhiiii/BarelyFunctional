@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'doctor_register_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -52,6 +53,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     backgroundColor: theme.colorScheme.primary,
                   ),
                   onPressed: () {
+                    if (selectedRole == 'Doctor') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const DoctorRegisterPage(),
+                        ),
+                      );
+                    }
                     debugPrint("Selected role: $selectedRole");
                     // later: route to dashboards
                   },
