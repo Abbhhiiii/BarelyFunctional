@@ -75,6 +75,9 @@ class _SymptomsFormState extends State<SymptomsForm> {
           .doc(user.uid)
           .get();
 
+      final String patientName = userDoc.data()?['name'] ?? "Unknown";
+      final String? patientPhone = userDoc.data()?['phone'];
+
       bool hasAlert = fever >= 7 ||
           cold >= 7 ||
           stomachPain >= 7 ||
@@ -83,7 +86,8 @@ class _SymptomsFormState extends State<SymptomsForm> {
 
       await FirebaseFirestore.instance.collection('symptoms_reports').add({
         "patientId": user.uid,
-        "patientName": userDoc.data()?['name'] ?? "Unknown",
+        "patientName": patientName,
+        "patientPhone": patientPhone, // ✅ FIX
         "fever": fever.toInt(),
         "cold": cold.toInt(),
         "stomachPain": stomachPain.toInt(),
@@ -92,6 +96,7 @@ class _SymptomsFormState extends State<SymptomsForm> {
         "otherSymptoms": otherController.text.trim(),
         "hasAlert": hasAlert,
         "sosTriggered": hasAlert,
+        "updatedBy": "patient",
         "createdAt": FieldValue.serverTimestamp(),
       });
 
@@ -165,7 +170,7 @@ class _SymptomsFormState extends State<SymptomsForm> {
 }
 
 /* ==========================================================
-   MANUAL SOS SCREEN (CONFIRM + ANIMATION)
+   MANUAL SOS SCREEN
 ========================================================== */
 
 class ManualSOSScreen extends StatefulWidget {
@@ -200,9 +205,13 @@ class _ManualSOSScreenState extends State<ManualSOSScreen>
         .doc(user.uid)
         .get();
 
+    final String patientName = userDoc.data()?['name'] ?? "Unknown";
+    final String? patientPhone = userDoc.data()?['phone'];
+
     await FirebaseFirestore.instance.collection('symptoms_reports').add({
       "patientId": user.uid,
-      "patientName": userDoc.data()?['name'] ?? "Unknown",
+      "patientName": patientName,
+      "patientPhone": patientPhone, // ✅ FIX
       "fever": 10,
       "cold": 10,
       "stomachPain": 10,
@@ -211,6 +220,7 @@ class _ManualSOSScreenState extends State<ManualSOSScreen>
       "otherSymptoms": "Manual emergency SOS triggered",
       "hasAlert": true,
       "sosTriggered": true,
+      "updatedBy": "patient",
       "createdAt": FieldValue.serverTimestamp(),
     });
 

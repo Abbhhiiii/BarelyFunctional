@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swasthyasetu/screens/patient_register_page.dart';
-import 'doctor_register_page.dart';
+import 'package:swasthyasetu/doctor/doctor_register_page.dart';
 import 'gov_worker_register_page.dart';
 
 class SignUpPage extends StatefulWidget {

@@ -1,4 +1,13 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "symptoms_reports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hasAlert", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

@@ -68,6 +68,7 @@ flutter:
     - assets/images/signup.png
     - assets/images/patient.png
     - assets/images/baddies.png
+    - assets/images/doctor.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

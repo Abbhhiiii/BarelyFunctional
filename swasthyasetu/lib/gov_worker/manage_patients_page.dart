@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'update_patient_health_page.dart';
 
-
 class ManagePatientsPage extends StatefulWidget {
   const ManagePatientsPage({super.key});
 
@@ -36,12 +35,14 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
         "age": data['age'] ?? '-',
         "gender": data['gender'] ?? 'Unknown',
         "source": "Registered User",
+        "id": doc.id,
       });
     }
 
     // 2️⃣ Fetch patients from `patients` (manual entries)
-    final patientsSnapshot =
-        await FirebaseFirestore.instance.collection('patients').get();
+    final patientsSnapshot = await FirebaseFirestore.instance
+        .collection('patients')
+        .get();
 
     for (var doc in patientsSnapshot.docs) {
       final data = doc.data();
@@ -50,6 +51,7 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
         "age": data['age'] ?? '-',
         "gender": data['sex'] ?? 'Unknown',
         "source": "Added by Gov Worker",
+        "id": doc.id,
       });
     }
 
@@ -62,49 +64,50 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Manage Patients"),
-      ),
+      appBar: AppBar(title: const Text("Manage Patients")),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : allPatients.isEmpty
-              ? const Center(child: Text("No patients found"))
-              : ListView.builder(
-                  itemCount: allPatients.length,
-                  itemBuilder: (context, index) {
-                    final patient = allPatients[index];
+          ? const Center(child: Text("No patients found"))
+          : ListView.builder(
+              itemCount: allPatients.length,
+              itemBuilder: (context, index) {
+                final patient = allPatients[index];
 
-                    return Card(
-  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-  child: ListTile(
-    leading: const Icon(Icons.person),
-    title: Text(patient['name']),
-    subtitle: Text(
-      "Age: ${patient['age']} | Gender: ${patient['gender']}",
-    ),
-    trailing: patient['source'] == "Added by Gov Worker"
-        ? ElevatedButton(
-            child: const Text("Update Health"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => UpdatePatientHealthPage(
-                    patientName: patient['name'],
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
                   ),
-                ),
-              );
-            },
-          )
-        : const Text(
-            "Self Reporting",
-            style: TextStyle(color: Colors.grey),
-          ),
-  ),
-);
-
-                  },
-                ),
+                  child: ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text(patient['name']),
+                    subtitle: Text(
+                      "Age: ${patient['age']} | Gender: ${patient['gender']}",
+                    ),
+                    trailing: patient['source'] == "Added by Gov Worker"
+                        ? ElevatedButton(
+                            child: const Text("Update Health"),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => UpdatePatientHealthPage(
+                                    patientName: patient['name'],
+                                    patientId: patient['id'],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : const Text(
+                            "Self Reporting",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
