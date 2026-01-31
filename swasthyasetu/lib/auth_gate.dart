@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/patient_dashboard.dart';
-import 'screens/gov_worker_dashboard.dart';
+// import 'screens/gov_worker_dashboard.dart';
 import 'screens/landing_page.dart';
 import 'screens/doctor_dashboard.dart';
+import 'package:swasthyasetu/gov_worker/gov_worker_dashboard.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
