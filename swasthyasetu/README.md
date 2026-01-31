@@ -67,56 +67,20 @@ The app enables:
 
 ---
 
-## 🩺 Key Features
+## 🩺 Key Features (Implemented)
 
-### 🔐 Authentication & Role-Based Access
+The `swasthyasetu` Flutter app currently implements the following features. This README documents what exists in the codebase and how to run it locally.
 
-- Single login system
-- Automatic redirection based on user type
+- **Authentication & Role Redirects**: Sign in and automatic routing to `DoctorDashboard`, `PatientDashboard`, or `GovWorkerDashboard` based on stored role.
+- **Appointments**: Appointment creation (doctors/gov-workers) stored under `appointments`. Patients see their scheduled appointments in their dashboard.
+- **Prescriptions**: Doctors can add prescriptions via the Manage Appointments flow. Prescriptions are saved to the appointment document and propagated to the patient's `users` document as `lastPrescription`.
+- **Profiles & Gov-worker patient management**: Profile screens for patients/doctors/gov workers are styled cards. Gov workers can add/manage manual patient entries stored in `patients`.
+- **Symptom Reporting & SOS**: Patients can submit symptom reports (slider-based) saved in `symptoms_reports`; a Manual SOS flow creates emergency reports.
+- **Management Pages**: `ManageAppointmentsPage` (doctor) and `ManagePatientsPage` (gov worker) let staff view, update, and add prescription/health data.
+- **UI/UX improvements**: Unified background color, keyboard-safe sign-in, improved card/list layouts, and aesthetic profile headers.
+- **Firestore Collections Used**: `users`, `patients`, `appointments`, `symptoms_reports`.
 
-### 📊 Health Tracking
-
-- Manual and digital health record management
-- Scheduled follow-up alerts
-- Doctor-verified data entry
-
-### 🖼️ Symptom-Based Reporting
-
-- Image-based symptom selection
-- Intensity-level tapping
-- Automatic alerts to assigned hospitals
-
-### 📞 Alerts & Communication
-
-- App notifications
-- Family member alert nomination
-- Call consultation support
-
-### 💊 Medicine Management
-
-- Color-coded medicine identification
-- Time-based reminders
-- Voice assistant for medicine instructions
-
-### 👩‍⚕️ Women’s Health Support
-
-- Symbol-based menstruation cycle tracking
-- Pregnancy milestone scheduling
-- Emergency SOS during pregnancy
-
-### 🧠 Mental Health & Safety
-
-- Domestic violence awareness section
-- Rights explained in local languages
-- Pre-coded content
-- Direct access to toll-free helplines
-
-### 🌐 Accessibility
-
-- Local language translation
-- Voice assistant support
-- Designed for low digital literacy users
-
+Development notes and run instructions are included below.
 ---
 
 ## 🏗️ System Architecture (High Level)
