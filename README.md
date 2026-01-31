@@ -67,56 +67,20 @@ The app enables:
 
 ---
 
-## 🩺 Key Features
+## 🩺 Key Features (Implemented)
 
-### 🔐 Authentication & Role-Based Access
+This repository contains the SwasthyaSetu mobile app with the following implemented features (reflecting the current codebase):
 
-- Single login system
-- Automatic redirection based on user type
+- **Authentication & Role Redirects**: Users sign in and are redirected based on role (`doctor`, `patient`, `gov_worker`).
+- **Appointments**: Doctors (or authorized users) can schedule appointments stored in the `appointments` collection; patients can view their appointments.
+- **Prescriptions**: Doctors can add prescriptions to appointments; prescriptions are saved on the appointment document and mirrored to the patient's `users` record as `lastPrescription`.
+- **Profile Views**: Simple but styled profile pages exist for patients, doctors, and government workers. Gov workers can add manual patient records saved in the `patients` collection.
+- **Symptom Reporting & SOS**: Patients can submit symptom reports (slider-based inputs) which are stored in `symptoms_reports`. A manual SOS flow triggers an alert record when severe symptoms are reported.
+- **Management UIs**: Doctor-facing `Manage Appointments` and gov-worker-facing `Manage Patients` pages let staff view and update records, and add prescriptions or health updates.
+- **Client-side Safety & UX improvements**: Keyboard-safe sign-in, unified background color, styled profile cards, and improved list/card layouts for appointment and patient displays.
+- **Firebase-backed storage**: The app uses Firestore collections: `users`, `patients`, `appointments`, and `symptoms_reports`.
 
-### 📊 Health Tracking
-
-- Manual and digital health record management
-- Scheduled follow-up alerts
-- Doctor-verified data entry
-
-### 🖼️ Symptom-Based Reporting
-
-- Image-based symptom selection
-- Intensity-level tapping
-- Automatic alerts to assigned hospitals
-
-### 📞 Alerts & Communication
-
-- App notifications
-- Family member alert nomination
-- Call consultation support
-
-### 💊 Medicine Management
-
-- Color-coded medicine identification
-- Time-based reminders
-- Voice assistant for medicine instructions
-
-### 👩‍⚕️ Women’s Health Support
-
-- Symbol-based menstruation cycle tracking
-- Pregnancy milestone scheduling
-- Emergency SOS during pregnancy
-
-### 🧠 Mental Health & Safety
-
-- Domestic violence awareness section
-- Rights explained in local languages
-- Pre-coded content
-- Direct access to toll-free helplines
-
-### 🌐 Accessibility
-
-- Local language translation
-- Voice assistant support
-- Designed for low digital literacy users
-
+Notes: the README focuses on features implemented in the current code. For dev setup and Firebase configuration see the app README below.
 ---
 
 ## 🏗️ System Architecture (High Level)
