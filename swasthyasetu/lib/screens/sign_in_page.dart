@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'doctor_dashboard.dart';
+import 'package:swasthyasetu/doctor/doctor_dashboard.dart';
 import 'patient_dashboard.dart';
 import 'package:swasthyasetu/gov_worker/gov_worker_dashboard.dart';
 

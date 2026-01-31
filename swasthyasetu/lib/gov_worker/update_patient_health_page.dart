@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UpdatePatientHealthPage extends StatefulWidget {
+  final String patientId; // ✅ IMPORTANT
   final String patientName;
 
   const UpdatePatientHealthPage({
     super.key,
+    required this.patientId,
     required this.patientName,
   });
 
@@ -23,6 +25,29 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
 
   bool sosTriggered = false;
   bool isSaving = false;
+
+  String? patientPhone; // ✅ will be fetched
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPatientPhone();
+  }
+
+  // -------------------- FETCH PATIENT PHONE --------------------
+
+  Future<void> fetchPatientPhone() async {
+    final doc = await FirebaseFirestore.instance
+        .collection('patients')
+        .doc(widget.patientId)
+        .get();
+
+    if (doc.exists) {
+      setState(() {
+        patientPhone = doc.data()?['phone'];
+      });
+    }
+  }
 
   // -------------------- UI HELPERS --------------------
 
@@ -62,26 +87,22 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
 
   // -------------------- FIRESTORE LOGIC --------------------
 
-  /// 🔴 EMERGENCY SOS
-  /// - Updates Firestore IMMEDIATELY
-  /// - Does NOT depend on Submit
+  /// 🔴 EMERGENCY SOS (IMMEDIATE DB UPDATE)
   Future<void> triggerSOS() async {
     if (isSaving) return;
 
     setState(() {
       isSaving = true;
-      fever = 10;
-      cold = 10;
-      stomachPain = 10;
-      headache = 10;
-      nausea = 10;
+      fever = cold = stomachPain = headache = nausea = 10;
       sosTriggered = true;
     });
 
     await FirebaseFirestore.instance
         .collection('symptoms_reports')
         .add({
+      "patientId": widget.patientId,
       "patientName": widget.patientName,
+      "patientPhone": patientPhone, // ✅ FIX
       "fever": 10,
       "cold": 10,
       "stomachPain": 10,
@@ -103,7 +124,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
     );
   }
 
-  /// 🟢 NORMAL UPDATE (NON-EMERGENCY)
+  /// 🟢 NORMAL UPDATE
   Future<void> submitHealthUpdate() async {
     if (isSaving) return;
 
@@ -119,7 +140,9 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
     await FirebaseFirestore.instance
         .collection('symptoms_reports')
         .add({
+      "patientId": widget.patientId,
       "patientName": widget.patientName,
+      "patientPhone": patientPhone, // ✅ FIX
       "fever": fever.toInt(),
       "cold": cold.toInt(),
       "stomachPain": stomachPain.toInt(),
@@ -206,7 +229,8 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
                     ),
                     onPressed: triggerSOS,
                     child: isSaving
-                        ? const CircularProgressIndicator(color: Colors.white)
+                        ? const CircularProgressIndicator(
+                            color: Colors.white)
                         : const Text("EMERGENCY SOS"),
                   ),
                 ),
@@ -215,7 +239,8 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
                   child: ElevatedButton(
                     onPressed: submitHealthUpdate,
                     child: isSaving
-                        ? const CircularProgressIndicator(color: Colors.white)
+                        ? const CircularProgressIndicator(
+                            color: Colors.white)
                         : const Text("Submit"),
                   ),
                 ),

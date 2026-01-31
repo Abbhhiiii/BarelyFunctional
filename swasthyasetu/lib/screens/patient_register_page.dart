@@ -41,21 +41,36 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
             child: Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _field("Full Name", nameController),
-                  _field("Age", ageController,
-                      keyboard: TextInputType.number),
+                  _field("Age", ageController, keyboard: TextInputType.number),
                   _genderSelector(),
-                  _field("Phone Number", phoneController,
-                      keyboard: TextInputType.phone),
+                  _field(
+                    "Phone Number",
+                    phoneController,
+                    keyboard: TextInputType.phone,
+                  ),
                   _field("Address", addressController),
+
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Medical History",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+
+                  _medicalCheckbox("Diabetes", diabetes, (v) => diabetes = v),
+                  _medicalCheckbox("Blood Pressure", bp, (v) => bp = v),
+                  _medicalCheckbox("Asthma", asthma, (v) => asthma = v),
 
                   const Divider(height: 40),
 
-                  _field("Email", emailController,
-                      keyboard: TextInputType.emailAddress),
-                  _field("Password", passwordController,
-                      isPassword: true),
+                  _field(
+                    "Email",
+                    emailController,
+                    keyboard: TextInputType.emailAddress,
+                  ),
+                  _field("Password", passwordController, isPassword: true),
 
                   const SizedBox(height: 30),
 
@@ -64,8 +79,7 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
                     child: ElevatedButton(
                       onPressed: loading ? null : _submit,
                       child: loading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white)
+                          ? const CircularProgressIndicator(color: Colors.white)
                           : const Text("Register"),
                     ),
                   ),
@@ -91,8 +105,7 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
         obscureText: isPassword,
         keyboardType: keyboard,
         decoration: InputDecoration(labelText: label),
-        validator: (v) =>
-            v == null || v.isEmpty ? "Please enter $label" : null,
+        validator: (v) => v == null || v.isEmpty ? "Please enter $label" : null,
       ),
     );
   }
@@ -113,6 +126,15 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
     );
   }
 
+  Widget _medicalCheckbox(String label, bool value, Function(bool) onChanged) {
+    return CheckboxListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(label),
+      value: value,
+      onChanged: (v) => setState(() => onChanged(v!)),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -127,12 +149,8 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
         gender: gender,
         phone: phoneController.text.trim(),
         address: addressController.text.trim(),
-        medicalHistory: {
-          'diabetes': diabetes,
-          'bp': bp,
-          'asthma': asthma,
-        },
-        emergencyContact: {}, // we’ll add later
+        medicalHistory: {'diabetes': diabetes, 'bp': bp, 'asthma': asthma},
+        emergencyContact: {}, // add later
       );
 
       Navigator.pushAndRemoveUntil(
@@ -141,8 +159,9 @@ class _PatientRegisterPageState extends State<PatientRegisterPage> {
         (_) => false,
       );
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       setState(() => loading = false);
     }
