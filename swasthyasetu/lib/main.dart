@@ -11,7 +11,6 @@ void main() async {
   runApp(const SwasthyaSetuApp());
 }
 
-
 class SwasthyaSetuApp extends StatelessWidget {
   const SwasthyaSetuApp({super.key});
 
@@ -26,7 +25,7 @@ class SwasthyaSetuApp extends StatelessWidget {
           seedColor: _seedGreen,
           brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: const Color(0xFFF3FBF3),
+        scaffoldBackgroundColor: const Color(0xFFFFF8E1),
         appBarTheme: AppBarTheme(
           backgroundColor: _seedGreen.withOpacity(0.95),
           foregroundColor: Colors.white,

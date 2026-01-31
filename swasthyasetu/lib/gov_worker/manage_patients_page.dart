@@ -36,6 +36,8 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
         "gender": data['gender'] ?? 'Unknown',
         "source": "Registered User",
         "id": doc.id,
+        "lastPrescription": data['lastPrescription'] ?? '',
+        "lastPrescriptionAt": data['lastPrescriptionAt'],
       });
     }
 
@@ -52,6 +54,8 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
         "gender": data['sex'] ?? 'Unknown',
         "source": "Added by Gov Worker",
         "id": doc.id,
+        "lastPrescription": data['lastPrescription'] ?? '',
+        "lastPrescriptionAt": data['lastPrescriptionAt'],
       });
     }
 
@@ -83,7 +87,14 @@ class _ManagePatientsPageState extends State<ManagePatientsPage> {
                     leading: const Icon(Icons.person),
                     title: Text(patient['name']),
                     subtitle: Text(
-                      "Age: ${patient['age']} | Gender: ${patient['gender']}",
+                      "Age: ${patient['age']} | Gender: ${patient['gender']}" +
+                          (patient['lastPrescription'] != null &&
+                                  (patient['lastPrescription'] as String)
+                                      .isNotEmpty
+                              ? '\nPrescription: ${patient['lastPrescription']}'
+                              : ''),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     trailing: patient['source'] == "Added by Gov Worker"
                         ? ElevatedButton(

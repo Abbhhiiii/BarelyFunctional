@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'call_requests_page.dart';
-import 'manage_appointments_page.dart';
+import 'book_appointment_page.dart';
 
 class DoctorHome extends StatelessWidget {
   const DoctorHome({super.key});
@@ -26,10 +26,7 @@ class DoctorHome extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Hi, Doctor 👋",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
           ),
 
@@ -42,9 +39,7 @@ class DoctorHome extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const CallRequestsPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const CallRequestsPage()),
                 );
               },
               child: Card(
@@ -82,7 +77,7 @@ class DoctorHome extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ManageAppointmentsPage(),
+                    builder: (_) => const BookAppointmentPage(),
                   ),
                 );
               },
