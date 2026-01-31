@@ -27,6 +27,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
   bool isSaving = false;
 
   String? patientPhone; // ✅ will be fetched
+  final TextEditingController prescriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
   // -------------------- FETCH PATIENT PHONE --------------------
 
   Future<void> fetchPatientPhone() async {
+    // Try patients collection first (manual entries)
     final doc = await FirebaseFirestore.instance
         .collection('patients')
         .doc(widget.patientId)
@@ -44,9 +46,34 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
 
     if (doc.exists) {
       setState(() {
-        patientPhone = doc.data()?['phone'];
+        final data = doc.data();
+        patientPhone = data?['phone'];
+        final pres = data?['lastPrescription']?.toString();
+        prescriptionController.text = pres ?? '';
+      });
+      return;
+    }
+
+    // Fallback: try users collection
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.patientId)
+        .get();
+
+    if (userDoc.exists) {
+      setState(() {
+        final data = userDoc.data();
+        patientPhone = data?['phone'];
+        final pres = data?['lastPrescription']?.toString();
+        prescriptionController.text = pres ?? '';
       });
     }
+  }
+
+  @override
+  void dispose() {
+    prescriptionController.dispose();
+    super.dispose();
   }
 
   // -------------------- UI HELPERS --------------------
@@ -97,9 +124,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
       sosTriggered = true;
     });
 
-    await FirebaseFirestore.instance
-        .collection('symptoms_reports')
-        .add({
+    await FirebaseFirestore.instance.collection('symptoms_reports').add({
       "patientId": widget.patientId,
       "patientName": widget.patientName,
       "patientPhone": patientPhone, // ✅ FIX
@@ -118,9 +143,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
     setState(() => isSaving = false);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("🚨 Emergency SOS sent successfully"),
-      ),
+      const SnackBar(content: Text("🚨 Emergency SOS sent successfully")),
     );
   }
 
@@ -137,9 +160,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
 
     setState(() => isSaving = true);
 
-    await FirebaseFirestore.instance
-        .collection('symptoms_reports')
-        .add({
+    await FirebaseFirestore.instance.collection('symptoms_reports').add({
       "patientId": widget.patientId,
       "patientName": widget.patientName,
       "patientPhone": patientPhone, // ✅ FIX
@@ -157,9 +178,9 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
 
     setState(() => isSaving = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Health update submitted")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Health update submitted")));
 
     Navigator.pop(context);
   }
@@ -169,9 +190,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Update Health – ${widget.patientName}"),
-      ),
+      appBar: AppBar(title: Text("Update Health – ${widget.patientName}")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -210,11 +229,14 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
             const SizedBox(height: 16),
 
             TextField(
+              controller: prescriptionController,
               enabled: false,
-              decoration: const InputDecoration(
-                labelText: "Medicine Prescription (Doctor)",
-                hintText: "Not prescribed yet",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: 'Prescription',
+                hintText: prescriptionController.text.isEmpty
+                    ? 'Not prescribed yet'
+                    : null,
+                border: const OutlineInputBorder(),
               ),
             ),
 
@@ -229,8 +251,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
                     ),
                     onPressed: triggerSOS,
                     child: isSaving
-                        ? const CircularProgressIndicator(
-                            color: Colors.white)
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text("EMERGENCY SOS"),
                   ),
                 ),
@@ -239,8 +260,7 @@ class _UpdatePatientHealthPageState extends State<UpdatePatientHealthPage> {
                   child: ElevatedButton(
                     onPressed: submitHealthUpdate,
                     child: isSaving
-                        ? const CircularProgressIndicator(
-                            color: Colors.white)
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text("Submit"),
                   ),
                 ),
